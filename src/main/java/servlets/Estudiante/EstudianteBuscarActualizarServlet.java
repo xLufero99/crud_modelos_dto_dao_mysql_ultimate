@@ -19,7 +19,7 @@ public class EstudianteBuscarActualizarServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         EstudianteDAO estudianteDAO = new EstudianteDAO();
         try {
-            EstudianteDTO estudiante = estudianteDAO.obtenerEstudiantePorId(id);
+            EstudianteDTO estudiante = estudianteDAO.leer(id); // Verifica que este método lance SQLException
             if (estudiante != null) {
                 request.setAttribute("estudiante", estudiante);
                 request.getRequestDispatcher("/EstudianteActualizar.jsp").forward(request, response);
@@ -27,7 +27,7 @@ public class EstudianteBuscarActualizarServlet extends HttpServlet {
                 request.setAttribute("mensaje", "Estudiante no encontrado con ID: " + id);
                 request.getRequestDispatcher("/EstudianteResultado.jsp").forward(request, response);
             }
-        } catch (SQLException e) {
+        } catch (SQLException e) { // Esto será alcanzable solo si leer lanza SQLException
             e.printStackTrace();
             request.setAttribute("mensaje", "Ocurrió un error al buscar el estudiante.");
             request.getRequestDispatcher("/EstudianteResultado.jsp").forward(request, response);

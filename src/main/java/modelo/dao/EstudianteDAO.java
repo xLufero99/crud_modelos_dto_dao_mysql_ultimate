@@ -11,7 +11,7 @@ import modelo.dto.EstudianteDTO;
 import conexion.ConexionBD;
 import conexion.ConsultaEstudiante;
 
-public class EstudianteDAO {
+public class EstudianteDAO implements interfaceDao<EstudianteDTO> {
 	private ConexionBD conexionBD;
 	public EstudianteDAO() {
 		this.conexionBD = new ConexionBD();  // Asegúrate de que esto no es null
@@ -20,36 +20,107 @@ public class EstudianteDAO {
 	Scanner sc = new Scanner(System.in);
 		
 	
-	public void insertarEstudiante(int id, String nombre, int edad, String facultad, int semestre, int promedio, String carrera) throws SQLException {
-        // Asume que conexionBD es una clase que proporciona la conexión a la base de datos
-        try (Connection con = conexionBD.getConnecion(); 
-             PreparedStatement preparedStatement = con.prepareStatement(ConsultaEstudiante.insertarEstudiantes())) {
+	//<<-------------------------------------------------------->>
+		
+		///desde aqui si empiezan el cacaito :D
 
-            // Establecer los valores del PreparedStatement
-            preparedStatement.setInt(1, id);
-            preparedStatement.setString(2, nombre); // 
-            preparedStatement.setInt(3, edad);
-            preparedStatement.setString(4, facultad); // 
-            preparedStatement.setInt(5, semestre);
-            preparedStatement.setInt(6, promedio);
-            preparedStatement.setString(7, carrera); // 
+		@Override
+		public void crear(EstudianteDTO entidad) throws SQLException {
+		    // Asume que conexionBD es una clase que proporciona la conexión a la base de datos
+		    try (Connection con = conexionBD.getConnecion(); 
+		         PreparedStatement preparedStatement = con.prepareStatement(ConsultaEstudiante.insertarEstudiantes())) {
 
-            // Ejecutar la actualización
-            int rows = preparedStatement.executeUpdate();
-            if (rows > 0) {
-                System.out.println("Registro Exitoso");
-            } else {
-                System.out.println("Registro Fallido");
-            }
-        }
-    }
+		        // Establecer los valores del PreparedStatement utilizando los métodos del DTO
+		        preparedStatement.setInt(1, entidad.getId());
+		        preparedStatement.setString(2, entidad.getNombre());
+		        preparedStatement.setInt(3, entidad.getEdad());
+		        preparedStatement.setString(4, entidad.getFacultad());
+		        preparedStatement.setInt(5, entidad.getSemestre());
+		        preparedStatement.setInt(6, entidad.getPromedio());
+		        preparedStatement.setString(7, entidad.getCarrera());
 
-	
-	
-	//ver todos los estudiantes
-	
-	 public List<EstudianteDTO> obtenerEstudiantes() throws SQLException {
-	        List<EstudianteDTO> listaEstudiantes = new ArrayList<>();
+		        // Ejecutar la actualización
+		        int rows = preparedStatement.executeUpdate();
+		        if (rows > 0) {
+		            System.out.println("Registro Exitoso");
+		        } else {
+		            System.out.println("Registro Fallido");
+		        }
+		    }
+		}
+
+
+
+
+		@Override
+		public EstudianteDTO leer(int id) throws SQLException {
+			EstudianteDTO estudiante = null;
+		    try (Connection connection = conexionBD.getConnecion();
+		         PreparedStatement preparedStatement = connection.prepareStatement(ConsultaEstudiante.obtenerEstudiantePorId())) {
+		        preparedStatement.setInt(1, id);
+		        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		            if (resultSet.next()) {
+		                estudiante = new EstudianteDTO();
+		                estudiante.setId(resultSet.getInt("id"));
+		                estudiante.setNombre(resultSet.getString("nombre"));
+		                estudiante.setEdad(resultSet.getInt("edad"));
+		                estudiante.setFacultad(resultSet.getString("facultad"));
+		                estudiante.setSemestre(resultSet.getInt("semestre"));
+		                estudiante.setPromedio(resultSet.getInt("promedio"));
+		                estudiante.setCarrera(resultSet.getString("carrera"));
+		            }
+		        }
+		    }
+		    return estudiante;
+		}
+
+
+
+
+
+		@Override
+		public void actualizar(EstudianteDTO entidad) throws SQLException{
+			try (Connection connection = conexionBD.getConnecion();
+			         PreparedStatement preparedStatement = connection.prepareStatement(ConsultaEstudiante.actualizarEstudiantes())) {
+
+			        // Establecer los valores del PreparedStatement
+				preparedStatement.setString(1, entidad.getNombre());
+				preparedStatement.setInt(2, entidad.getEdad());
+				preparedStatement.setString(3, entidad.getFacultad());
+				preparedStatement.setInt(4, entidad.getSemestre());
+				preparedStatement.setInt(5, entidad.getPromedio());
+				preparedStatement.setString(6, entidad.getCarrera());
+				preparedStatement.setInt(7, entidad.getId());
+
+
+			        // Ejecutar la actualización
+			        int rows = preparedStatement.executeUpdate();
+			        if (rows > 0) {
+			            System.out.println("Registro actualizado exitosamente.");
+			        } else {
+			            System.out.println("Actualización fallida.");
+			        }
+			    }
+			}
+
+
+		@Override
+		public void eliminar(int id) throws SQLException {
+			try (Connection connection = conexionBD.getConnecion(); Statement statement = connection.createStatement();) {
+				int rows = statement.executeUpdate(ConsultaEstudiante.borrarEstudiantesid(id));
+				if (rows > 0) {
+					System.out.println("Record deleted successfully");
+				} else {
+					System.out.println("Something went wrong");
+				}
+			}
+		}
+			
+
+
+		@Override
+		public List<EstudianteDTO> listar() throws SQLException {
+			List<EstudianteDTO> listaEstudiantes = new ArrayList<>();
 
 	        String sql = "SELECT * FROM Estudiantes";
 	        try (Connection con = conexionBD.getConnecion();
@@ -71,70 +142,10 @@ public class EstudianteDAO {
 	        }
 	        return listaEstudiantes;
 	    }
-	
-	//terminado solo falta arrglar machetazos
-	 
-	 public EstudianteDTO obtenerEstudiantePorId(int id) throws SQLException {
-		    EstudianteDTO estudiante = null;
-		    try (Connection connection = conexionBD.getConnecion();
-		         PreparedStatement preparedStatement = connection.prepareStatement(ConsultaEstudiante.obtenerEstudiantePorId())) {
-		        preparedStatement.setInt(1, id);
-		        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-		            if (resultSet.next()) {
-		                estudiante = new EstudianteDTO();
-		                estudiante.setId(resultSet.getInt("id"));
-		                estudiante.setNombre(resultSet.getString("nombre"));
-		                estudiante.setEdad(resultSet.getInt("edad"));
-		                estudiante.setFacultad(resultSet.getString("facultad"));
-		                estudiante.setSemestre(resultSet.getInt("semestre"));
-		                estudiante.setPromedio(resultSet.getInt("promedio"));
-		                estudiante.setCarrera(resultSet.getString("carrera"));
-		            }
-		        }
-		    }
-		    return estudiante;
-		}
-
-	 
-	 
-	 //arriba no tocar
-	 
-	 public void actualizarEstudiante(int id, String nombre, int edad, String facultad, int semestre, int promedio, String carrera) throws SQLException {
-		    try (Connection connection = conexionBD.getConnecion();
-		         PreparedStatement preparedStatement = connection.prepareStatement(ConsultaEstudiante.actualizarEstudiantes())) {
-
-		        // Establecer los valores del PreparedStatement
-		        preparedStatement.setString(1, nombre);
-		        preparedStatement.setInt(2, edad);
-		        preparedStatement.setString(3, facultad);
-		        preparedStatement.setInt(4, semestre);
-		        preparedStatement.setInt(5, promedio);
-		        preparedStatement.setString(6, carrera);
-		        preparedStatement.setInt(7, id);
-
-		        // Ejecutar la actualización
-		        int rows = preparedStatement.executeUpdate();
-		        if (rows > 0) {
-		            System.out.println("Registro actualizado exitosamente.");
-		        } else {
-		            System.out.println("Actualización fallida.");
-		        }
-		    }
-		}
-
-		// =>delete Record Of Entire one Row
-		public void borrarEstudiante(int id) throws SQLException {
-			try (Connection connection = conexionBD.getConnecion(); Statement statement = connection.createStatement();) {
-				int rows = statement.executeUpdate(ConsultaEstudiante.borrarEstudiantesid(id));
-				if (rows > 0) {
-					System.out.println("Record deleted successfully");
-				} else {
-					System.out.println("Something went wrong");
-				}
-			}
+			
 		}
 			
 			
-	
 
-}
+
+

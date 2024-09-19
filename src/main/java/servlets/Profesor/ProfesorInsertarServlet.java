@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import modelo.dao.ProfesorDAO;
+import modelo.dto.ProfesorDTO;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -21,16 +22,23 @@ public class ProfesorInsertarServlet extends HttpServlet {
         String facultad = request.getParameter("facultad");
         String asignaturas = request.getParameter("asignaturas");
 
+        // Crear objeto ProfesorDTO
+        ProfesorDTO profesor = new ProfesorDTO();
+        profesor.setId(id);
+        profesor.setNombre(nombre);
+        profesor.setEdad(edad);
+        profesor.setFacultad(facultad);
+        profesor.setAsignatura(asignaturas); // Asegúrate de que sea setAsignatura
+
         ProfesorDAO profesorDAO = new ProfesorDAO();
         String mensaje;
         try {
-            profesorDAO.insertarProfesor(id, nombre, edad, facultad, asignaturas);
+            profesorDAO.crear(profesor); // Cambiar para pasar el objeto DTO
             mensaje = "Profesor insertado exitosamente.";
         } catch (SQLException e) {
             e.printStackTrace();
             mensaje = "Error al insertar el profesor.";
         }
 
-       
     }
 }

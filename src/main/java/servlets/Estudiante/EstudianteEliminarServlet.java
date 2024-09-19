@@ -23,7 +23,7 @@ public class EstudianteEliminarServlet extends HttpServlet {
         EstudianteDAO estudianteDAO = new EstudianteDAO();
         
         try {
-            estudianteDAO.borrarEstudiante(id);
+            estudianteDAO.eliminar(id);
             request.setAttribute("mensaje", "Estudiante eliminado exitosamente.");
         } catch (SQLException e) {
             e.printStackTrace();

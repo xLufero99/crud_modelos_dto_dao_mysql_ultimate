@@ -19,7 +19,7 @@ public class ProfesorVerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ProfesorDAO profesorDAO = new ProfesorDAO();
         try {
-            List<ProfesorDTO> listaProfesores = profesorDAO.obtenerProfesores();
+            List<ProfesorDTO> listaProfesores = profesorDAO.listar();
             if (listaProfesores != null) {
                 request.setAttribute("profesores", listaProfesores);
             }

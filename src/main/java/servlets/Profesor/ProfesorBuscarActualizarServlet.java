@@ -19,7 +19,7 @@ public class ProfesorBuscarActualizarServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         ProfesorDAO profesorDAO = new ProfesorDAO();
         try {
-            ProfesorDTO profesor = profesorDAO.obtenerProfesorPorId(id);
+            ProfesorDTO profesor = profesorDAO.leer(id);
             if (profesor != null) {
                 request.setAttribute("profesor", profesor);
                 request.getRequestDispatcher("/ProfesorActualizar.jsp").forward(request, response);

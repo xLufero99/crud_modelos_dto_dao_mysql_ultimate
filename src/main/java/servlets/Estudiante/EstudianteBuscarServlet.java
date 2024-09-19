@@ -19,7 +19,7 @@ public class EstudianteBuscarServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         EstudianteDAO estudianteDAO = new EstudianteDAO();
         try {
-            EstudianteDTO estudiante = estudianteDAO.obtenerEstudiantePorId(id);
+            EstudianteDTO estudiante = estudianteDAO.leer(id);
             if (estudiante != null) {
                 request.setAttribute("estudiante", estudiante);
                 request.getRequestDispatcher("/EstudianteResultado.jsp").forward(request, response);

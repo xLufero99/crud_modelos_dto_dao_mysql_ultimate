@@ -19,7 +19,7 @@ public class EstudianteVertServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EstudianteDAO estudianteDAO = new EstudianteDAO();
         try {
-            List<EstudianteDTO> listaEstudiantes = estudianteDAO.obtenerEstudiantes();
+            List<EstudianteDTO> listaEstudiantes = estudianteDAO.listar();
             if (listaEstudiantes != null) {
                 request.setAttribute("estudiantes", listaEstudiantes);
             }
