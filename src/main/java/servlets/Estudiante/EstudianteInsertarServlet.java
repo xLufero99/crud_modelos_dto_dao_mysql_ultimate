@@ -1,5 +1,6 @@
 package servlets.Estudiante;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -39,7 +40,6 @@ public class EstudianteInsertarServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    
 	    int id = Integer.parseInt(request.getParameter("id"));
 	    String nombre = request.getParameter("nombre");
 	    int edad = Integer.parseInt(request.getParameter("edad"));
@@ -59,11 +59,22 @@ public class EstudianteInsertarServlet extends HttpServlet {
 	    estudiante.setCarrera(carrera);
 
 	    EstudianteDAO estudianteDAO = new EstudianteDAO();
+	    String mensaje;
+
 	    try {
 	        estudianteDAO.crear(estudiante); // Llama al método crear con el objeto DTO
+	        mensaje = "Estudiante insertado exitosamente.";
 	    } catch (SQLException e) {
+	        mensaje = "Error al insertar estudiante: " + e.getMessage();
 	        e.printStackTrace();
 	    }
+
+	    // Enviar mensaje a la vista
+	    request.setAttribute("mensaje", mensaje);
+	    RequestDispatcher dispatcher = request.getRequestDispatcher("EstudianteInsertar.jsp"); // Cambia esto a la ruta de tu JSP
+	    dispatcher.forward(request, response);
 	}
 
-}
+	}
+	
+

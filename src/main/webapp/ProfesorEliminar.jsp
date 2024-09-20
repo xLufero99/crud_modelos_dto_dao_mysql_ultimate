@@ -15,6 +15,9 @@
                 <input type="text" class="form-control" id="id" name="id" required>
             </div>
             <button type="submit" class="btn btn-danger">Eliminar Profesor</button>
+            <div class="mt-4">
+            <a href="menuProfesores.jsp" class="btn btn-secondary">Volver al Menú de Profesores</a>
+        </div>
         </form>
         
         <hr>
@@ -29,6 +32,8 @@
                 <% 
             }
         %>
+        
     </div>
+    
 </body>
 </html>

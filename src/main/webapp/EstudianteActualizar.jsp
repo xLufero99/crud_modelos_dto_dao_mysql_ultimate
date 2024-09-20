@@ -42,16 +42,19 @@
                 <input type="text" id="carrera" name="carrera" class="form-control" value="<%= estudiante.getCarrera() %>" required>
             </div>
             <button type="submit" class="btn btn-primary">Actualizar</button>
+            <a href="menuEstudiantes.jsp" class="btn btn-secondary">Volver al Menú de Estudiantes</a>
         </form>
-        <a href="index.jsp" class="btn btn-secondary mt-3">Volver al Inicio</a>
+        
         <%
             } else {
         %>
         <p>Estudiante no encontrado.</p>
-        <a href="index.jsp" class="btn btn-secondary mt-3">Volver al Inicio</a>
+        <br>
+        
         <%
             }
         %>
+        
     </div>
 </body>
 </html>

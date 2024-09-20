@@ -9,6 +9,12 @@
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">Registrar Estudiante</h1>
+
+        <!-- Mostrar mensaje -->
+        <c:if test="${not empty mensaje}">
+            <div class="alert alert-info">${mensaje}</div>
+        </c:if>
+
         <form action="EstudianteInsertarServlet" method="post">
             <div class="form-group">
                 <label for="id">ID:</label>
@@ -47,6 +53,11 @@
 
             <button type="submit" class="btn btn-primary">Insertar Estudiante</button>
         </form>
+
+        <!-- Botón para volver al menú de estudiantes -->
+        <div class="mt-4">
+            <a href="menuEstudiantes.jsp" class="btn btn-secondary">Volver al Menú de Estudiantes</a>
+        </div>
     </div>
 
     <!-- Bootstrap JS and dependencies -->

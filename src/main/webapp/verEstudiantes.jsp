@@ -58,6 +58,12 @@
         <% 
             } // Cierre del bloque que verifica si hay estudiantes
         %>
+
+        <!-- Botones para volver al menú y ver estudiantes -->
+        <div class="mt-4">
+            <a href="menuEstudiantes.jsp" class="btn btn-secondary">Volver al Menú de Estudiantes</a>
+            
+
     </div>
 
     <!-- Bootstrap JS and dependencies -->

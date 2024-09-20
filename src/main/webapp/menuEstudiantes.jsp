@@ -25,6 +25,11 @@
             <a class="btn btn-warning" href="EstudianteBuscarActualizar.jsp">Actualizar Estudiante</a>
             <a class="btn btn-danger" href="EstudianteEliminar.jsp">Borrar Estudiante</a>
         </div>
+
+        <!-- Botón para volver al Menú Principal -->
+        <div class="text-center mt-4">
+            <a class="btn btn-dark" href="index.jsp">Menú Principal</a>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

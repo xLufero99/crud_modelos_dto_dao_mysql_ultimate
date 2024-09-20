@@ -17,7 +17,8 @@
             </div>
             <button type="submit" class="btn btn-primary">Buscar</button>
         </form>
-        <a href="index.jsp" class="btn btn-secondary mt-3">Volver al Inicio</a>
+        <br>
+        <a href="menuEstudiantes.jsp" class="btn btn-secondary">Volver al Menú de Estudiantes</a>
     </div>
 </body>
 </html>

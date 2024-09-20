@@ -2,12 +2,12 @@ package modelo.entiedades;
 
 public class Estudiante extends Persona {
 	int semestre;
-	double promedio;
+	int promedio;
 	String carrera;
 	public Estudiante() {
 		super();
 	}
-	public Estudiante(int semestre, double promedio, String carrera) {
+	public Estudiante(int semestre, int promedio, String carrera) {
 		super();
 		this.semestre = semestre;
 		this.promedio = promedio;
@@ -23,10 +23,10 @@ public class Estudiante extends Persona {
 	public void setSemestre(int semestre) {
 		this.semestre = semestre;
 	}
-	public double getPromedio() {
+	public int getPromedio() {
 		return promedio;
 	}
-	public void setPromedio(double promedio) {
+	public void setPromedio(int promedio) {
 		this.promedio = promedio;
 	}
 	public String getCarrera() {

@@ -17,6 +17,10 @@
             </div>
             <button type="submit" class="btn btn-primary">Buscar</button>
         </form>
+        <div class="mt-4">
+            <a href="menuProfesores.jsp" class="btn btn-secondary">Volver al Menú de Profesores</a>
+        </div>
     </div>
+    
 </body>
 </html>

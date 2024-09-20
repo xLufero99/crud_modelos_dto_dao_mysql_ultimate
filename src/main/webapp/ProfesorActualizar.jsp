@@ -35,12 +35,12 @@
             </div>
             <button type="submit" class="btn btn-primary">Actualizar</button>
         </form>
-        <a href="index.jsp" class="btn btn-secondary mt-3">Volver al Inicio</a>
+        <a href="menuProfesores.jsp" class="btn btn-secondary mt-3">Volver al Menú de profesores</a>
         <%
             } else {
         %>
         <p>Profesor no encontrado.</p>
-        <a href="index.jsp" class="btn btn-secondary mt-3">Volver al Inicio</a>
+        <a href="menuProfesores.jsp" class="btn btn-secondary mt-3">Volver al Menú de profesores</a>
         <%
             }
         %>

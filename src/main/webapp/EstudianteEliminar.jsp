@@ -29,6 +29,8 @@
                 <% 
             }
         %>
+        <a href="menuEstudiantes.jsp" class="btn btn-secondary">Volver al Menú de Estudiantes</a>
     </div>
+    
 </body>
 </html>

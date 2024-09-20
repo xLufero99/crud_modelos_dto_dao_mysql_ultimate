@@ -54,7 +54,11 @@
         <% 
             } // Cierre del bloque que verifica si hay profesores
         %>
+        <div class="mt-4">
+            <a href="menuProfesores.jsp" class="btn btn-secondary">Volver al Menú de Profesores</a>
+        </div>
     </div>
+
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

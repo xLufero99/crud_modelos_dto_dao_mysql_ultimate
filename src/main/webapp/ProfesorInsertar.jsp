@@ -31,12 +31,17 @@
             </div>
 
             <div class="form-group">
-                <label for="asignaturas">Asignaturas:</label>
-                <input type="text" class="form-control" id="asignaturas" name="asignaturas" required>
+                <label for="asignatura">Asignatura:</label> <!-- Cambié asignaturas a asignatura -->
+                <input type="text" class="form-control" id="asignatura" name="asignatura" required> <!-- Cambié el name a asignatura -->
             </div>
 
             <button type="submit" class="btn btn-primary">Insertar Profesor</button>
         </form>
+        
+        <!-- Botón para volver al menú de estudiantes -->
+        <div class="mt-4">
+            <a href="menuProfesores.jsp" class="btn btn-secondary">Volver al Menú de Profesores</a>
+        </div>
     </div>
 
     <!-- Bootstrap JS and dependencies -->

@@ -1,5 +1,4 @@
 package modelo.dao;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,124 +6,121 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import modelo.dto.ProfesorDTO; // Asegúrate de tener este DTO en el paquete correcto
+import modelo.dto.ProfesorDTO;
+import modelo.entiedades.Profesor;
 import conexion.ConexionBD;
 import conexion.ConsultaProfesor;
+import modelo.entiedades.MapHandler;
 
 public class ProfesorDAO implements interfaceDao<ProfesorDTO> {
     private ConexionBD conexionBD;
 
     public ProfesorDAO() {
-        this.conexionBD = new ConexionBD();  // Asegúrate de que esto no sea null
+        this.conexionBD = new ConexionBD();
     }
-    
-    /////<<----------------------------------------------->>
-    
-    /////arreglado machetazo DTO jsjs solo esta insertar
-       
-    /////crear estudiante arreglado
+
     @Override
     public void crear(ProfesorDTO entidad) throws SQLException {
+        // Convertir el DTO a la entidad Profesor usando el MapHandler
+        Profesor profesor = MapHandler.dtoToProfesor(entidad);
+        
         try (Connection con = conexionBD.getConnecion(); 
              PreparedStatement preparedStatement = con.prepareStatement(ConsultaProfesor.insertarProfesores())) {
 
-            // Establecer los valores del PreparedStatement utilizando los métodos del DTO
-            preparedStatement.setInt(1, entidad.getId());
-            preparedStatement.setString(2, entidad.getNombre());
-            preparedStatement.setInt(3, entidad.getEdad());
-            preparedStatement.setString(4, entidad.getFacultad());
-            preparedStatement.setString(5, entidad.getAsignatura());
+            // Usar el objeto Profesor para asignar valores al PreparedStatement
+            preparedStatement.setInt(1, profesor.getId());
+            preparedStatement.setString(2, profesor.getNombre());
+            preparedStatement.setInt(3, profesor.getEdad());
+            preparedStatement.setString(4, profesor.getFacultad());
+            preparedStatement.setString(5, profesor.getAsignatura());
 
-            // Ejecutar la actualización
             int rows = preparedStatement.executeUpdate();
             if (rows > 0) {
                 System.out.println("Registro Exitoso");
             } else {
-                System.out.println("Registro Fallido");
+                System.out.println("Registro Fallido: no se insertó ningún registro.");
             }
+        } catch (SQLException e) {
+            System.err.println("Error SQL: " + e.getMessage());
+            throw e; // re-lanzar para manejar en el servlet
         }
     }
-    
-    
-   
-///buscar por id arreglado
-	@Override
-	public ProfesorDTO leer(int id) throws SQLException {
-		ProfesorDTO profesor = null;
+
+    @Override
+    public ProfesorDTO leer(int id) throws SQLException {
+        ProfesorDTO profesorDTO = null;
         try (Connection connection = conexionBD.getConnecion();
              PreparedStatement preparedStatement = connection.prepareStatement(ConsultaProfesor.obtenerProfesorPorId())) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    profesor = new ProfesorDTO();
+                    Profesor profesor = new Profesor();
                     profesor.setId(resultSet.getInt("id"));
                     profesor.setNombre(resultSet.getString("nombre"));
                     profesor.setEdad(resultSet.getInt("edad"));
                     profesor.setFacultad(resultSet.getString("facultad"));
                     profesor.setAsignatura(resultSet.getString("asignatura"));
+
+                    // Convertir la entidad Profesor a DTO usando el MapHandler
+                    profesorDTO = MapHandler.profesorToDto(profesor);
                 }
             }
         }
-        return profesor;
+        return profesorDTO;
     }
-	
-	
-	///actualizar
 
-	@Override
-	public void actualizar(ProfesorDTO entidad) throws SQLException {
-		try (Connection connection = conexionBD.getConnecion();
-	             PreparedStatement preparedStatement = connection.prepareStatement(ConsultaProfesor.actualizarProfesores())) {
+    @Override
+    public void actualizar(ProfesorDTO entidad) throws SQLException {
+        Profesor profesor = MapHandler.dtoToProfesor(entidad); // Convertir DTO a entidad
+        try (Connection connection = conexionBD.getConnecion();
+             PreparedStatement preparedStatement = connection.prepareStatement(ConsultaProfesor.actualizarProfesores())) {
 
-	            // Establecer los valores del PreparedStatement
-	            preparedStatement.setString(1, entidad.getNombre());
-	            preparedStatement.setInt(2, entidad.getEdad());
-	            preparedStatement.setString(3, entidad.getFacultad());
-	            preparedStatement.setString(4, entidad.getAsignatura());
-	            preparedStatement.setInt(5, entidad.getId());
+            preparedStatement.setString(1, profesor.getNombre());
+            preparedStatement.setInt(2, profesor.getEdad());
+            preparedStatement.setString(3, profesor.getFacultad());
+            preparedStatement.setString(4, profesor.getAsignatura());
+            preparedStatement.setInt(5, profesor.getId());
 
-	            // Ejecutar la actualización
-	            int rows = preparedStatement.executeUpdate();
-	            if (rows > 0) {
-	                System.out.println("Registro actualizado exitosamente.");
-	            } else {
-	                System.out.println("Actualización fallida.");
-	            }
-	        }
-	    }
+            int rows = preparedStatement.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Registro actualizado exitosamente.");
+            } else {
+                System.out.println("Actualización fallida.");
+            }
+        }
+    }
 
-	@Override
-	public void eliminar(int id) throws SQLException {
-		try (Connection connection = conexionBD.getConnecion();
-	             Statement statement = connection.createStatement()) {
-	            int rows = statement.executeUpdate(ConsultaProfesor.borrarProfesoresid(id));
-	            if (rows > 0) {
-	                System.out.println("Registro eliminado exitosamente.");
-	            } else {
-	                System.out.println("Algo salió mal.");
-	            }
-	        }
-	    }
-		
-///ver todos
-	@Override
-	public List<ProfesorDTO> listar() throws SQLException {
-		List<ProfesorDTO> listaProfesores = new ArrayList<>();
+    @Override
+    public void eliminar(int id) throws SQLException {
+        try (Connection connection = conexionBD.getConnecion();
+             PreparedStatement preparedStatement = connection.prepareStatement(ConsultaProfesor.borrarProfesoresid(id))) {
+            int rows = preparedStatement.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Registro eliminado exitosamente.");
+            } else {
+                System.out.println("Algo salió mal.");
+            }
+        }
+    }
 
-        String sql = "SELECT * FROM Profesores";
+    @Override
+    public List<ProfesorDTO> listar() throws SQLException {
+        List<ProfesorDTO> listaProfesores = new ArrayList<>();
         try (Connection con = conexionBD.getConnecion();
              Statement statement = con.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
+             ResultSet resultSet = statement.executeQuery(ConsultaProfesor.obtenerProfesores())) {
 
             while (resultSet.next()) {
-                ProfesorDTO profesor = new ProfesorDTO();
+                Profesor profesor = new Profesor();
                 profesor.setId(resultSet.getInt("id"));
                 profesor.setNombre(resultSet.getString("nombre"));
                 profesor.setEdad(resultSet.getInt("edad"));
                 profesor.setFacultad(resultSet.getString("facultad"));
                 profesor.setAsignatura(resultSet.getString("asignatura"));
 
-                listaProfesores.add(profesor);
+                // Convertir la entidad Profesor a DTO usando el MapHandler
+                ProfesorDTO profesorDTO = MapHandler.profesorToDto(profesor);
+                listaProfesores.add(profesorDTO);
             }
         }
         return listaProfesores;

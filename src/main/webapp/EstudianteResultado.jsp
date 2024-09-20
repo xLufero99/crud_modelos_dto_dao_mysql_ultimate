@@ -53,7 +53,7 @@
                 }
             }
         %>
-        <a href="index.jsp" class="btn btn-primary mt-3">Volver al Inicio</a>
+        <a href="menuEstudiantes.jsp" class="btn btn-primary mt-3">Volver al Menú de Estudiantes</a>
     </div>
 </body>
 </html>
